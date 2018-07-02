@@ -1,0 +1,15 @@
+{
+  "name": "Own framework",
+  "description": "Test task for Yohai project.",
+  "keywords": ["framework", "custom"],
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=7.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  }
+}
