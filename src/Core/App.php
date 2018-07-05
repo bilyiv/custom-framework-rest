@@ -2,17 +2,17 @@
 
 namespace Core;
 
-use Core\Http\Exception\HttpExceptionInterface;
-use Core\Http\Exception\NotFoundHttpException;
-use Core\Http\Request;
+use Core\Http\Exception\{HttpExceptionInterface, NotFoundHttpException};
 use Core\Http\Response\Response;
 use Core\Routing\Router;
+use Psr\Http\Message\{ResponseInterface, ServerRequestInterface};
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Class App
  * @package Core
  */
-class App implements AppInterface
+class App implements RequestHandlerInterface
 {
     /**
      * @var Router
@@ -27,7 +27,7 @@ class App implements AppInterface
     /**
      * @inheritdoc
      */
-    public function handle(Request $request): Response
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
             $response =  $this->handleRequest($request);
@@ -39,11 +39,11 @@ class App implements AppInterface
     }
 
     /**
-     * @param Request $request
-     * @return Response
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
      * @throws NotFoundHttpException
      */
-    protected function handleRequest(Request $request): Response
+    protected function handleRequest(ServerRequestInterface $request): ResponseInterface
     {
         $route = $this->router->matchRequest($request);
 
@@ -54,10 +54,10 @@ class App implements AppInterface
 
     /**
      * @param \Exception $e
-     * @param Request $request
-     * @return Response
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
      */
-    protected function handleException(\Exception $e, Request $request): Response
+    protected function handleException(\Exception $e, ServerRequestInterface $request): ResponseInterface
     {
         $statusCode = 500;
         if ($e instanceof HttpExceptionInterface) {

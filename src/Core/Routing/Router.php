@@ -2,8 +2,8 @@
 
 namespace Core\Routing;
 
-use Core\Http\Request;
 use Core\Http\Exception\NotFoundHttpException;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class Router
@@ -67,7 +67,7 @@ class Router implements RouteMatcherInterface
     /**
      * @inheritdoc
      */
-    public function matchRequest(Request $request): Route
+    public function matchRequest(ServerRequestInterface $request): Route
     {
         foreach ($this->routes as $route) {
             if ($route->getPath() === $request->getPath() && $route->hasMethod($request->getMethod())) {

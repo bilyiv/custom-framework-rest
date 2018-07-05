@@ -2,11 +2,13 @@
 
 namespace Core\Http;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * Class Request
  * @package Core\Http
  */
-class Request
+class Request implements ServerRequestInterface
 {
     /**
      * @var string
