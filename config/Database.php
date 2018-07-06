@@ -25,6 +25,10 @@ class Database
      */
     public static $password = 'secret';
 
+    private function __construct()
+    {
+    }
+
     /**
      * @return PDO
      */
