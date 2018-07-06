@@ -11,9 +11,9 @@ class Response
     use ResponseDataTrait;
 
     /**
-     * @const string
+     * @var string
      */
-    public const PROTOCOL_VERSION = '1.1';
+    private $protocolVersion = '1.1';
 
     public function __construct(string $content = '', int $statusCode = 200, array $headers = [])
     {
@@ -36,6 +36,6 @@ class Response
         echo $this->content;
 
         // status
-        header(sprintf('HTTP/%s %s', static::PROTOCOL_VERSION, $this->statusCode), true, $this->statusCode);
+        header(sprintf('HTTP/%s %s', $this->protocolVersion, $this->statusCode), true, $this->statusCode);
     }
 }

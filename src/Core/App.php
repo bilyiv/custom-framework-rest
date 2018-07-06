@@ -3,9 +3,10 @@
 namespace Core;
 
 use Core\Http\Exception\HttpExceptionInterface;
-use Core\Http\Exception\NotFoundHttpException;
 use Core\Http\Request;
 use Core\Http\Response\Response;
+use Core\Middleware\MiddlewareInterface;
+use Core\Routing\Route;
 use Core\Routing\Router;
 
 /**
@@ -19,9 +20,47 @@ class App implements AppInterface
      */
     private $router;
 
-    public function __construct(Router $router)
+    /**
+     * @var \PDO
+     */
+    private $pdo;
+
+    /**
+     * @var array MiddlewareInterface[]
+     */
+    private $middlewares = [];
+
+    public function __construct(Router $router, \PDO $pdo)
     {
         $this->router = $router;
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * @return Router
+     */
+    public function getRouter(): Router
+    {
+        return $this->router;
+    }
+
+    /**
+     * @return \PDO
+     */
+    public function getPdo(): \PDO
+    {
+        return $this->pdo;
+    }
+
+    /**
+     * @param MiddlewareInterface $middleware
+     * @return App
+     */
+    public function addMiddleware(MiddlewareInterface $middleware): self
+    {
+        $this->middlewares[] = $middleware;
+
+        return $this;
     }
 
     /**
@@ -30,7 +69,9 @@ class App implements AppInterface
     public function handle(Request $request): Response
     {
         try {
-            $response =  $this->handleRequest($request);
+            $route = $this->router->matchRequest($request);
+
+            $response = $this->handleMiddlewares($request) ?: $this->handleRequest($request, $route);
         } catch (\Exception $e) {
             $response = $this->handleException($e, $request);
         }
@@ -40,16 +81,26 @@ class App implements AppInterface
 
     /**
      * @param Request $request
-     * @return Response
-     * @throws NotFoundHttpException
+     * @return Response|null
      */
-    protected function handleRequest(Request $request): Response
+    protected function handleMiddlewares(Request $request): ?Response
     {
-        $route = $this->router->matchRequest($request);
+        $middleware = current($this->middlewares);
+        next($this->middlewares);
 
-        $response = $route($request);
+        return $middleware ? $middleware->process($request, $this) : null;
+    }
 
-        return $response;
+    /**
+     * @param Request $request
+     * @param Route $route
+     * @return Response
+     */
+    protected function handleRequest(Request $request, Route $route): Response
+    {
+        $actionClass = $route->getAction();
+
+        return call_user_func([new $actionClass($this), 'handle'], $request);
     }
 
     /**

@@ -8,8 +8,10 @@ namespace Core\Routing;
  */
 class Route
 {
-    public const POST_METHOD = 'POST';
-    public const GET_METHOD = 'GET';
+    public const METHOD_POST = 'POST';
+    public const METHOD_PUT = 'PUT';
+    public const METHOD_GET = 'GET';
+    public const METHOD_DELETE = 'DELETE';
 
     /**
      * @var string
@@ -62,11 +64,10 @@ class Route
     }
 
     /**
-     * @param array ...$parameter
-     * @return mixed
+     * @return string
      */
-    public function __invoke(...$parameter)
+    public function getAction(): string
     {
-        return call_user_func([$this->action, 'handle'], ...$parameter);
+        return $this->action;
     }
 }

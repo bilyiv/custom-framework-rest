@@ -28,8 +28,11 @@ class Request
      */
     private $query;
 
+
+    private $headers;
+
     /**
-     * @var array
+     * @var string|null
      */
     private $body;
 
@@ -39,7 +42,8 @@ class Request
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->request = $_REQUEST;
         $this->query = $_GET;
-        $this->body = $_POST;
+        $this->headers = getallheaders();
+        $this->body = stream_get_contents(fopen('php://input', 'r'));
     }
 
     /**
@@ -60,9 +64,25 @@ class Request
     }
 
     /**
-     * @return array
+     * @return array|false
      */
-    public function getBody(): array
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @param string $name
+     * @return null|string
+     */
+    public function getHeader(string $name): ?string {
+        return $this->headers[$name] ?? null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody(): string
     {
         return $this->body;
     }
@@ -81,5 +101,14 @@ class Request
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    /**
+     * @param string[] ...$methods
+     * @return bool
+     */
+    public function isMethod(string ...$methods): bool
+    {
+        return in_array($this->method, $methods);
     }
 }

@@ -23,7 +23,7 @@ class Router implements RouteMatcherInterface
      */
     public function addGet(string $path, string $callback): self
     {
-        $this->add($path, $callback, Route::GET_METHOD);
+        $this->add($path, $callback, Route::METHOD_GET);
 
         return $this;
     }
@@ -35,7 +35,7 @@ class Router implements RouteMatcherInterface
      */
     public function addPost(string $path, string $callback): self
     {
-        $this->add($path, $callback, Route::POST_METHOD);
+        $this->add($path, $callback, Route::METHOD_POST);
 
         return $this;
     }
