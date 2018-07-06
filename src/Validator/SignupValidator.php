@@ -10,6 +10,9 @@ use Core\Validator\ValidatorInterface;
  */
 class SignupValidator implements ValidatorInterface
 {
+    /**
+     * @inheritdoc
+     */
     public function validate(array $data): bool
     {
         return isset($data['email']) && isset($data['password']);
