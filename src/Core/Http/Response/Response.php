@@ -32,10 +32,10 @@ class Response
             header($name.': '.$value, false, $this->statusCode);
         }
 
-        // content
-        echo $this->content;
-
         // status
         header(sprintf('HTTP/%s %s', $this->protocolVersion, $this->statusCode), true, $this->statusCode);
+
+        // content
+        echo $this->content;
     }
 }

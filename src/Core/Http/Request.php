@@ -92,7 +92,7 @@ class Request
      */
     public function getPath(): string
     {
-        return rtrim($this->path, '/');
+        return $this->path == '/' ? $this->path : rtrim($this->path, '/');
     }
 
     /**

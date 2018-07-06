@@ -1,13 +1,19 @@
+# What it exists
+
+Core, Sign in and sign up actions, json middleware, user entity, request data validators, user entity and repository,
+migrations and database config.
+
+
 ## How to test
 
 Run the development server:
 
 ```bash
-php -S 127.0.0.1:8000 public/index.php
+docker-composer up --build
 ```
 
-Test hello response:
+Test:
 
 ```bash
-curl http://127.0.0.1:8000/hello
+curl http://127.0.0.1:8000/
 ```
