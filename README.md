@@ -12,6 +12,12 @@ Run the development server:
 docker-composer up --build
 ```
 
+When everything is running, run migrations by the following command:
+
+```bash
+docker-compose exec php-fpm php bin/migrate.php
+```
+
 Test:
 
 ```bash
