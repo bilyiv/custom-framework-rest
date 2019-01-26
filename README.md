@@ -1,4 +1,4 @@
-# What it exists
+# Custom rest framework
 
 Core, Sign in and sign up actions, json middleware, user entity, request data validators, user entity and repository,
 migrations and database config.
